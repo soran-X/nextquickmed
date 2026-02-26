@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <!-- Background pill -->
+  <rect x="0" y="0" width="200" height="50" rx="8" fill="var(--brand-primary, #0ea5e9)" opacity="0.1"/>
+  <!-- Cross symbol -->
+  <g transform="translate(10, 10)">
+    <rect x="11" y="5" width="8" height="20" rx="2" fill="var(--brand-primary, #0ea5e9)"/>
+    <rect x="5" y="11" width="20" height="8" rx="2" fill="var(--brand-primary, #0ea5e9)"/>
+  </g>
+  <!-- Text -->
+  <text x="48" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="var(--brand-primary, #0ea5e9)">Quick</text>
+  <text x="112" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="var(--brand-secondary, #0284c7)">Med</text>
+</svg>
