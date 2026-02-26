@@ -24,6 +24,7 @@ export default function AdminRidersPage() {
   const [editing, setEditing] = useState<RiderWithProfile | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [profilePicFile, setProfilePicFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   const supabase = createClient();
@@ -43,6 +44,7 @@ export default function AdminRidersPage() {
     setEditing(null);
     setForm(EMPTY_FORM);
     setProfilePicFile(null);
+    setPreviewUrl(null);
     setDialogOpen(true);
   };
 
@@ -57,6 +59,7 @@ export default function AdminRidersPage() {
       vehicle_type: r.vehicle_type,
     });
     setProfilePicFile(null);
+    setPreviewUrl(r.profile_pic ?? null);
     setDialogOpen(true);
   };
 
@@ -94,7 +97,7 @@ export default function AdminRidersPage() {
       }
 
       // Upload profile pic
-      let profilePicUrl = editing?.profile_pic ?? null;
+      let profilePicUrl = previewUrl ?? null;
       if (profilePicFile && userId) {
         const ext = profilePicFile.name.split('.').pop();
         const path = `${userId}/profile.${ext}`;
@@ -256,8 +259,29 @@ export default function AdminRidersPage() {
             </div>
             <div>
               <Label>Profile Photo</Label>
+              {previewUrl && (
+                <div className="mt-2 mb-2 flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={previewUrl} alt="Profile preview" className="h-16 w-16 rounded-full object-cover border border-gray-200" />
+                  <button
+                    type="button"
+                    onClick={() => { setPreviewUrl(null); setProfilePicFile(null); }}
+                    className="text-xs text-red-500 hover:text-red-700"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
               <input type="file" accept="image/*"
-                onChange={(e) => setProfilePicFile(e.target.files?.[0] ?? null)}
+                onChange={(e) => {
+                  const file = e.target.files?.[0] ?? null;
+                  setProfilePicFile(file);
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => setPreviewUrl(reader.result as string);
+                    reader.readAsDataURL(file);
+                  }
+                }}
                 className="mt-1 block w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-blue-700" />
             </div>
             <div className="flex gap-3 pt-2">
